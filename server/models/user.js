@@ -1,24 +1,34 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const validator = require('validator');
 
-var User = mongoose.model('Users', {
+var User = mongoose.model('User', {
     email: {
         type: String,
         required: true,
         minlength: 1,
-        trim: true
-    }
+        trim: true,
+        unique: true,
+        validate: {
+            validator: validator.isEmail,
+            message: '{value} is not a valid email'
+        }
+    },
+    password: {
+        type: String,
+        require: true,
+        minlength: 6
+    },
+    tokens: [{
+        access: {
+            type: String,
+            required: true
+        },
+        tokens: {
+            type: String,
+            required: true
+        }
+    }]
 });
-
-
-// var newUser = new User({
-//     email: 'ryan@bynd.com'
-// });
-//
-// newUser.save().then((doc) => {
-//     console.log('Saved User', doc)
-// }, (e) => {
-//     console.log('Unable to save user', e)
-// });
 
 
 module.exports = {
